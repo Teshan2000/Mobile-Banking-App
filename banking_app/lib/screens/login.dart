@@ -1,3 +1,5 @@
+import 'package:banking_app/components/loginForm.dart';
+import 'package:banking_app/screens/register.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +39,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+                const LoginForm(),
                 const SizedBox(height: 30),
                 const Center(
                   child: Text(
@@ -68,12 +71,12 @@ class LoginPage extends StatelessWidget {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => const RegisterPage(),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const RegisterPage(),
+                                    ),
+                                  );
                                 },
                             ),
                           ],
