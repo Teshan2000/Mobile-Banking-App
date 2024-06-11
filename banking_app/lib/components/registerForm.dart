@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:banking_app/components/button.dart';
+import 'package:banking_app/providers/apiProvider.dart';
+import 'package:banking_app/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -24,6 +27,20 @@ class RegisterFormState extends State<RegisterForm> {
       'email': _emailController.text,
       'password': _passController.text,
     };
+
+    try {
+      final result = await ApiProvider().postRequest(route: '/register', data: data);
+      final response = jsonDecode(result.body);
+      if (response['status'] == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      } else {
+        print('Register failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
   }
 
   @override

@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:banking_app/components/button.dart';
+import 'package:banking_app/providers/apiProvider.dart';
+import 'package:banking_app/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -21,6 +25,27 @@ class LoginFormState extends State<LoginForm> {
       'email': _emailController.text,
       'password': _passController.text,
     };
+
+    try {
+      final result = await ApiProvider().postRequest(route: '/login', data: data);
+      final response = jsonDecode(result.body);
+      if (response['status'] == 200) {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setBool('isLoggedIn', true);
+        await preferences.setInt('user_id', response['user']['id']);
+        await preferences.setString('name', response['user']['name']);
+        await preferences.setString('email', response['user']['email']);
+        await preferences.setString('token', response['token']);
+        print('Login successful: ${response['message']}');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      } else {
+        print('Login failed: ${response['message']}');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
   }
 
   @override
