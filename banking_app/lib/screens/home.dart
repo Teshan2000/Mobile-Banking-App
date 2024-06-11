@@ -12,10 +12,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
+        title: const Center(child: Text('Welcome', style: TextStyle(color: Colors.white),)),
         backgroundColor: Colors.purple,
         actions: const [
-          EndDrawerButton(),
+          EndDrawerButton(color: Colors.white),
         ],
       ),
       body: const Padding(

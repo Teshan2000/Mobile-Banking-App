@@ -1,3 +1,4 @@
+import 'package:banking_app/components/registerForm.dart';
 import 'package:banking_app/screens/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -25,10 +26,12 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 const Center(
                   child: Text(
-                    'Welcome to the Expense Tracker App. Please create a new account',
+                    'Please create a new account',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -36,13 +39,8 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+                const RegisterForm(),
                 const SizedBox(height: 40),
-                const Center(
-                  child: Text(
-                    'or sign up with',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
                 const SizedBox(height: 25),
                 const SizedBox(height: 30),
                 Center(
@@ -51,13 +49,14 @@ class RegisterPage extends StatelessWidget {
                       text: "Already have an account? ",
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 17,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: "  Sign In",
                           style: const TextStyle(
-                            color: Colors.orange,
+                            color: Colors.purple,
+                            fontSize: 17,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {

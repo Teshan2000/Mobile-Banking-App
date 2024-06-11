@@ -46,7 +46,8 @@ class LoginPage extends StatelessWidget {
                     'Forgot Your Password?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.orange,
+                      color: Colors.purple,
+                      fontSize: 16,
                       decorationStyle: TextDecorationStyle.solid,
                     ),
                   ),
@@ -60,13 +61,14 @@ class LoginPage extends StatelessWidget {
                           text: "Don't have an account? ",
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 14,
+                            fontSize: 17,
                           ),
                           children: <TextSpan>[
                             TextSpan(
                               text: "  Sign Up",
                               style: const TextStyle(
-                                color: Colors.orange,
+                                color: Colors.purple,
+                                fontSize: 17,
                                 decorationStyle: TextDecorationStyle.solid,
                               ),
                               recognizer: TapGestureRecognizer()
@@ -74,7 +76,8 @@ class LoginPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const RegisterPage(),
+                                      builder: (context) =>
+                                          const RegisterPage(),
                                     ),
                                   );
                                 },

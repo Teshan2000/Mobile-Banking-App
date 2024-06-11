@@ -36,20 +36,20 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _nameController,
             keyboardType: TextInputType.text,
-            cursorColor: Colors.orange,
+            cursorColor: Colors.purple,
             decoration: InputDecoration(
               hintText: 'Username',
               labelText: 'Username',
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.person_outlined),
-              prefixIconColor: Colors.orange,
+              prefixIconColor: Colors.purple,
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Colors.orange,
+                  color: Colors.purple,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -79,20 +79,20 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            cursorColor: Colors.orange,
+            cursorColor: Colors.purple,
             decoration: InputDecoration(
               hintText: 'Email Address',
               labelText: 'Email Address',
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.email_outlined),
-              prefixIconColor: Colors.orange,
+              prefixIconColor: Colors.purple,
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Colors.orange,
+                  color: Colors.purple,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -122,21 +122,21 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _passController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Colors.orange,
+            cursorColor: Colors.purple,
             obscureText: obsecurePass,
             decoration: InputDecoration(
                 hintText: 'Password',
                 labelText: 'Password',
                 alignLabelWithHint: true,
                 prefixIcon: const Icon(Icons.lock_outline),
-                prefixIconColor: Colors.orange,
+                prefixIconColor: Colors.purple,
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Colors.orange,
+                    color: Colors.purple,
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(15),
@@ -161,7 +161,7 @@ class RegisterFormState extends State<RegisterForm> {
                           )
                         : const Icon(
                             Icons.visibility_outlined,
-                            color: Colors.orange,
+                            color: Colors.purple,
                           ))),
             validator: (val) {
               if (val!.length < 6) {
