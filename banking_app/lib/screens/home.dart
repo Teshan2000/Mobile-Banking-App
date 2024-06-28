@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,6 +10,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  SharedPreferences? preferences;
+  bool isLoading = false;
+  bool _isDisposed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePreferences();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  void _initializePreferences() async {
+    setState(() {
+      isLoading = true;
+    });
+    preferences = await SharedPreferences.getInstance();
+    if (!_isDisposed) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,26 +83,26 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       const SizedBox(
-                        width: 25,
+                        width: 35,
                       ),
-                      const Column(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text('Peter Parker',
+                          Text(preferences?.getString('name') ?? 'Your Name',
                               textAlign: TextAlign.end,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 // fontWeight: FontWeight.bold,
                                 fontSize: 20,
                                 color: Colors.white,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 3,
                           ),
                           Text(
-                            'peterparker22@gmail.com',
+                            preferences?.getString('email') ?? 'Your Email',
                             textAlign: TextAlign.end,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.white,
                             ),
@@ -214,6 +242,112 @@ class _HomeState extends State<Home> {
               height: 10,
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          height: 70,          
+          decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      Icons.account_balance_wallet_outlined,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    ),
+                  ),
+              ),  
+              const SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      Icons.currency_exchange_outlined,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+                    ),
+                  ),
+              ),  
+              const SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      Icons.home_outlined,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    ),
+                  ),
+              ),  
+              const SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      Icons.insert_chart_outlined_rounded,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    ),
+                  ),
+              ),  
+              const SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      Icons.person_outline,
+                      size: 35,
+                      color: Colors.black,
+                    ),
+                    ),
+                  ),
+              ),            
+            ],
+          ),
         ),
       ),
     );
