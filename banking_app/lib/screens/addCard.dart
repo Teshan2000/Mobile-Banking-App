@@ -4,8 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class CardDetails extends StatelessWidget {
+class CardDetails extends StatefulWidget {
   const CardDetails({super.key});
+
+  @override
+  State<CardDetails> createState() => _CardDetailsState();
+}
+
+class _CardDetailsState extends State<CardDetails> {
+  List<Map<String, dynamic>> cards = [
+    {"image": "assets/master.png", "name": "Master Card"},
+    {"image": "assets/visa.png", "name": "Visa Card"},
+    {"image": "assets/paypal.png", "name": "Pay Pal"},
+    {"image": "assets/gpay.png", "name": "Google Pay"},
+    {"image": "assets/ipay.png", "name": "Apple Pay"},
+    {"image": "assets/helapay.png", "name": "Hela Pay"},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +27,6 @@ class CardDetails extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(89, 139, 225, 1),
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(89, 139, 225, 1),
-          leading: const Icon(Icons.arrow_back, color: Colors.white),
           title: const Center(
               child: Text(
             'Add Card Details',
@@ -58,113 +71,71 @@ class CardDetails extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                      SizedBox(
+                        height: 230,                        
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 3,
+                          scrollDirection: Axis.vertical,
+                          crossAxisSpacing: 0,
+                          mainAxisSpacing: 15,
+                          children: List.generate(cards.length, (index) {
+                            return GestureDetector(
+                              child: Container(
+                                decoration: const ShapeDecoration(
+                                color: Color.fromRGBO(62, 102, 236, 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                    BorderRadius.all(Radius.circular(15)))),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration: ShapeDecoration(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Center(
+                                          child: Image.asset(
+                                            cards[index]['image'],
+                                            width: 48,
+                                            height: 48,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      cards[index]['name'],
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                child: Image.asset(
-                                  'assets/credit_card.png',
-                                  width: 48,
-                                  height: 48,
-                                  fit: BoxFit.cover,
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                child: Image.asset(
-                                  'assets/helapay.png',
-                                  width: 48,
-                                  height: 48,
-                                  fit: BoxFit.cover,
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                child: Image.asset(
-                                  'assets/webxpay.png',
-                                  width: 48,
-                                  height: 48,
-                                  fit: BoxFit.cover,
-                                )),
-                          ),
-                        ],
+                              onTap: () {},
+                            );
+                          }),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      const Row(
-                        children: [
-                          SizedBox(
-                            width: 7,
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Text(
-                              'Credit / Debit Card',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 28,
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Text(
-                              'HelaPay Card',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 28,
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Text(
-                              'WebXPay Card',
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
+                      const Divider(thickness: 2, color: Colors.white),
                       const SizedBox(
-                        height: 30,
+                        height: 10,
                       ),
                       const Center(
                         child: Text(
@@ -366,11 +337,10 @@ class CardDetails extends StatelessWidget {
               const SizedBox(height: 10),
               Button(
                 title: 'Save Card',
-                onPressed: () {
+                width: double.infinity, disable: false, onPressed: () { 
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Payments()));
-                }, width: double.infinity, 
-                disable: false,
+                 },
               ),
             ]))));
   }
