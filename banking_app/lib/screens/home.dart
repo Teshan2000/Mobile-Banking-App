@@ -1,3 +1,4 @@
+import 'package:banking_app/screens/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,35 @@ class _HomeState extends State<Home> {
   SharedPreferences? preferences;
   bool isLoading = false;
   bool _isDisposed = false;
+
+  List<Map<String, dynamic>> services = [
+    {
+      "color": Colors.white,
+      "icon": Icons.account_balance_wallet_outlined,
+      "name": "Withdrawal"
+    },
+    {
+      "color": Colors.white,
+      "icon": Icons.calculate_outlined,
+      "name": "Deposit"
+    },
+    {
+      "color": Colors.white,
+      "icon": Icons.currency_exchange,
+      "name": "Transfer"
+    },
+    {
+      "color": Colors.white,
+      "icon": Icons.calculate_outlined,
+      "name": "Fixed Deposit"
+    },
+    {"color": Colors.white, "icon": Icons.payment, "name": "Payments"},
+    {
+      "color": Colors.white,
+      "icon": Icons.calculate_outlined,
+      "name": "Calculator"
+    },
+  ];
 
   @override
   void initState() {
@@ -83,7 +113,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       const SizedBox(
-                        width: 35,
+                        width: 25,
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -115,7 +145,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 22),
@@ -139,7 +169,7 @@ class _HomeState extends State<Home> {
                               color: Color.fromRGBO(62, 102, 236, 1)),
                         ),
                         SizedBox(
-                          height: 17,
+                          height: 10,
                         ),
                         Text(
                           'Rs. 15, 368.00',
@@ -155,7 +185,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             const Text(
               'Our Services',
@@ -166,10 +196,11 @@ class _HomeState extends State<Home> {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(
-              height: 20,
+              height: 17,
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 280,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               decoration: const ShapeDecoration(
                   color: Color.fromRGBO(62, 102, 236, 1),
                   shape: RoundedRectangleBorder(
@@ -181,7 +212,7 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.vertical,
                 crossAxisSpacing: 0,
                 mainAxisSpacing: 15,
-                children: List.generate(6, (index) {
+                children: List.generate(services.length, (index) {
                   return GestureDetector(
                     child: GestureDetector(
                       child: Column(
@@ -189,40 +220,37 @@ class _HomeState extends State<Home> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 2),
                             child: Column(
-                              mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-                                  child: Card(
-                                    elevation: 5,
-                                    // width: 70,
-                                    // height: 70,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                      horizontal: 8, vertical: 0),
+                                  child: Container(
+                                    height: 80,
+                                    width: 80,
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
                                     ),
-                                    // decoration: ShapeDecoration(
-                                    //   color: const Color.fromARGB(
-                                    //       255, 255, 255, 255),
-                                    //   shape: RoundedRectangleBorder(
-                                    //     borderRadius:
-                                    //         BorderRadius.circular(20),
-                                    //   ),
-                                    // ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 13, vertical: 14),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(),
                                       child: Center(
-                                          child: Icon(
-                                        Icons.calculate_outlined,
-                                        size: 50,
-                                      )),
+                                        child: Icon(
+                                          services[index]['icon'],
+                                          color: Colors.black,
+                                          size: 45,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                                const Text(
-                                  'Payment',
-                                  style: TextStyle(
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  services[index]['name'],
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -247,7 +275,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          height: 70,          
+          height: 70,
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -259,7 +287,10 @@ class _HomeState extends State<Home> {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => Payments()));
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -271,9 +302,9 @@ class _HomeState extends State<Home> {
                       size: 35,
                       color: Colors.black,
                     ),
-                    ),
                   ),
-              ),  
+                ),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: InkWell(
@@ -289,9 +320,9 @@ class _HomeState extends State<Home> {
                       size: 30,
                       color: Colors.black,
                     ),
-                    ),
                   ),
-              ),  
+                ),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: InkWell(
@@ -307,9 +338,9 @@ class _HomeState extends State<Home> {
                       size: 35,
                       color: Colors.black,
                     ),
-                    ),
                   ),
-              ),  
+                ),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: InkWell(
@@ -325,9 +356,9 @@ class _HomeState extends State<Home> {
                       size: 35,
                       color: Colors.black,
                     ),
-                    ),
                   ),
-              ),  
+                ),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: InkWell(
@@ -343,9 +374,9 @@ class _HomeState extends State<Home> {
                       size: 35,
                       color: Colors.black,
                     ),
-                    ),
                   ),
-              ),            
+                ),
+              ),
             ],
           ),
         ),
