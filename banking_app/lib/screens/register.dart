@@ -9,6 +9,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(89, 139, 225, 1),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
@@ -55,7 +56,7 @@ class RegisterPage extends StatelessWidget {
                         TextSpan(
                           text: "  Sign In",
                           style: const TextStyle(
-                            color: Colors.purple,
+                            color: Colors.white,
                             fontSize: 17,
                           ),
                           recognizer: TapGestureRecognizer()

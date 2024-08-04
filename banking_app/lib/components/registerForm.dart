@@ -29,7 +29,8 @@ class RegisterFormState extends State<RegisterForm> {
     };
 
     try {
-      final result = await ApiProvider().postRequest(route: '/register', data: data);
+      final result =
+          await ApiProvider().postRequest(route: '/register', data: data);
       final response = jsonDecode(result.body);
       if (response['status'] == 200) {
         Navigator.of(context).pushReplacement(
@@ -53,20 +54,22 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _nameController,
             keyboardType: TextInputType.text,
-            cursorColor: Colors.purple,
+            cursorColor: const Color.fromRGBO(89, 139, 225, 1),
             decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
               hintText: 'Username',
               labelText: 'Username',
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.person_outlined),
-              prefixIconColor: Colors.purple,
+              prefixIconColor: const Color.fromRGBO(89, 139, 225, 1),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Colors.purple,
+                  color: const Color.fromRGBO(89, 139, 225, 1),
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -96,20 +99,22 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            cursorColor: Colors.purple,
+            cursorColor: const Color.fromRGBO(89, 139, 225, 1),
             decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
               hintText: 'Email Address',
               labelText: 'Email Address',
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.email_outlined),
-              prefixIconColor: Colors.purple,
+              prefixIconColor: const Color.fromRGBO(89, 139, 225, 1),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Colors.purple,
+                  color: const Color.fromRGBO(89, 139, 225, 1),
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -139,21 +144,23 @@ class RegisterFormState extends State<RegisterForm> {
           TextFormField(
             controller: _passController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Colors.purple,
+            cursorColor: const Color.fromRGBO(89, 139, 225, 1),
             obscureText: obsecurePass,
             decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
                 hintText: 'Password',
                 labelText: 'Password',
                 alignLabelWithHint: true,
                 prefixIcon: const Icon(Icons.lock_outline),
-                prefixIconColor: Colors.purple,
+                prefixIconColor: const Color.fromRGBO(89, 139, 225, 1),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Colors.purple,
+                    color: const Color.fromRGBO(89, 139, 225, 1),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(15),
@@ -178,7 +185,7 @@ class RegisterFormState extends State<RegisterForm> {
                           )
                         : const Icon(
                             Icons.visibility_outlined,
-                            color: Colors.purple,
+                            color: const Color.fromRGBO(89, 139, 225, 1),
                           ))),
             validator: (val) {
               if (val!.length < 6) {

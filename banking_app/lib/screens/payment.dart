@@ -1,15 +1,26 @@
+import 'package:banking_app/components/bankCard.dart';
+import 'package:banking_app/components/button.dart';
+import 'package:banking_app/screens/addCard.dart';
 import 'package:flutter/material.dart';
 
-class Payments extends StatelessWidget {
+class Payments extends StatefulWidget {
   const Payments({super.key});
 
+  @override
+  State<Payments> createState() => _PaymentsState();
+}
+
+class _PaymentsState extends State<Payments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color.fromRGBO(89, 139, 225, 1),
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(89, 139, 225, 1),
-          leading: const Icon(Icons.arrow_back, color: Colors.white),
+          leading: IconButton(
+            onPressed: () {Navigator.of(context).pop();},
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          ),
           title: const Center(
               child: Text(
             'Payments',
@@ -39,23 +50,58 @@ class Payments extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Card(
-                elevation: 2,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 147,
+              SizedBox(
+                height: 170,
+                width: double.infinity,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Row(children: [
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(90),
+                            ),
+                          ),
+                          child: const Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Icon(Icons.add)),
                         ),
-                      ],
-                    ),
-                  ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CardDetails()));
+                        },
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const BankCard(
+                        name: 'Peter Parker',
+                        cardNumber: '5865 6564 4654 5892',
+                        bankName: 'Sampath Bank',
+                        expireDate: '03/24',
+                        cardType: 'assets/master.png',
+                        color: Colors.yellow,
+                      ),
+                      const BankCard(
+                        name: 'Peter Parker',
+                        cardNumber: '5865 6564 4654 5892',
+                        bankName: 'HNB',
+                        expireDate: '04/23',
+                        cardType: 'assets/visa.png',
+                        color: Colors.orange,
+                      ),
+                    ]),
+                  ],
                 ),
               ),
               const SizedBox(
@@ -109,8 +155,9 @@ class Payments extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
+                      const Divider(thickness: 2, color: Colors.white),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 10),
@@ -171,8 +218,10 @@ class Payments extends StatelessWidget {
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(10)),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -202,8 +251,10 @@ class Payments extends StatelessWidget {
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(10)),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -233,8 +284,10 @@ class Payments extends StatelessWidget {
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(10)),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -264,8 +317,10 @@ class Payments extends StatelessWidget {
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(10)),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -288,6 +343,18 @@ class Payments extends StatelessWidget {
                       )
                     ],
                   )),
+              const SizedBox(height: 10),
+              Button(
+                title: 'Make Payment',
+                width: double.infinity,
+                disable: false,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Payments()));
+                },
+              ),
             ]))));
   }
 }

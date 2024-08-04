@@ -58,20 +58,22 @@ class LoginFormState extends State<LoginForm> {
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            cursorColor: Colors.purple,
+            cursorColor: const Color.fromRGBO(89, 139, 225, 1),
             decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
               hintText: 'Email Address',
               labelText: 'Email Address',
               alignLabelWithHint: true,
               prefixIcon: const Icon(Icons.email_outlined),
-              prefixIconColor: Colors.purple,
+              prefixIconColor: const Color.fromRGBO(89, 139, 225, 1),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                  color: Colors.purple,
+                  color: const Color.fromRGBO(89, 139, 225, 1),
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -101,21 +103,23 @@ class LoginFormState extends State<LoginForm> {
           TextFormField(
             controller: _passController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Colors.purple,
+            cursorColor: const Color.fromRGBO(89, 139, 225, 1),
             obscureText: obsecurePass,
             decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
                 hintText: 'Password',
                 labelText: 'Password',
                 alignLabelWithHint: true,
                 prefixIcon: const Icon(Icons.lock_outline),
-                prefixIconColor: Colors.purple,
+                prefixIconColor: const Color.fromRGBO(89, 139, 225, 1),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                    color: Colors.purple,
+                    color: const Color.fromRGBO(89, 139, 225, 1),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(15),
@@ -140,7 +144,7 @@ class LoginFormState extends State<LoginForm> {
                           )
                         : const Icon(
                             Icons.visibility_outlined,
-                            color: Colors.purple,
+                            color: const Color.fromRGBO(89, 139, 225, 1),
                           ))),
             validator: (val) {
               if (val!.length < 6) {
