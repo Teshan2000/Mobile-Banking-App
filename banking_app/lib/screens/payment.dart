@@ -1,6 +1,7 @@
 import 'package:banking_app/components/bankCard.dart';
 import 'package:banking_app/components/button.dart';
 import 'package:banking_app/screens/addCard.dart';
+import 'package:banking_app/screens/transactions.dart';
 import 'package:flutter/material.dart';
 
 class Payments extends StatefulWidget {
@@ -349,10 +350,65 @@ class _PaymentsState extends State<Payments> {
                 width: double.infinity,
                 disable: false,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Payments()));
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (_) => BottomSheet(
+                      onClosing: () {
+                        TextButton.icon(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close),
+                            label: const Text('Close'));
+                      },
+                      builder: (BuildContext context) {
+                        return SizedBox(height: 165,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 35),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  'Are you sure to make this payment?',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Button(
+                                      title: 'Confirm',
+                                      width: 165,
+                                      disable: false,
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Transactions()));
+                                      },
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Button(
+                                      title: 'Cancel',
+                                      width: 165,
+                                      disable: false,
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Payments()));
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );                  
                 },
               ),
             ]))));
