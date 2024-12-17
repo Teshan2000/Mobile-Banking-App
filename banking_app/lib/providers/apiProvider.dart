@@ -38,4 +38,29 @@ class ApiProvider {
       rethrow;
     }
   }
+
+  Future<http.Response> sendResetLink({required String email}) async {
+    final url = Uri.parse('$baseUrl/forgot-password');
+
+    try {
+      final response = await http.post(
+        url,
+        body: {"email": email},
+      );
+      if (response.statusCode == 200) {
+        print('Password reset successfully!');
+        return response;
+      } else {
+        print('Unable to reset password');
+        throw Exception('Unable to reset password');
+      }
+    } catch (e) {
+      print('Error making POST request: $e');
+      rethrow;
+    }
+
+    
+
+    
+  }
 }
