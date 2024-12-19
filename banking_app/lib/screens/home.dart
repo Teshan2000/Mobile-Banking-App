@@ -1,4 +1,5 @@
 import 'package:banking_app/screens/payment.dart';
+import 'package:banking_app/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -288,8 +289,11 @@ class _HomeState extends State<Home> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => Payments()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Payments(),
+                        ));
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -362,7 +366,13 @@ class _HomeState extends State<Home> {
               const SizedBox(width: 10),
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Profile(),
+                        ));
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
