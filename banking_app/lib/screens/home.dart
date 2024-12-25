@@ -370,7 +370,11 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Profile(),
+                          builder: (context) => Profile(
+                            name: preferences?.getString('name') ?? 'Your Name',
+                            email: preferences?.getString('email') ?? 'Your Email', 
+                            password: preferences?.getString('password') ?? 'Your Password',
+                          ),
                         ));
                   },
                   child: Container(

@@ -1,15 +1,99 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:banking_app/components/button.dart';
-import 'package:banking_app/screens/home.dart';
+import 'package:banking_app/providers/apiProvider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final String name;
+  final String email;
+  final String password;
+
+  const Profile({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.password,
+  });
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController telController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  SharedPreferences? preferences;
+  String? photoUrl;
+  File? _image;
+  List<ProfileDetails> profile = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // _fetchProfile();
+  }
+
+  Future<void> saveUserData(String name, String email, String password) async {
+    final preferences = await SharedPreferences.getInstance();
+    preferences.setString('name', name);
+    preferences.setString('email', email);
+    preferences.setString('password', password);
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _submitForm() async {
+    try {
+      // Only send fields that have been updated
+      String? updatedName =
+          nameController.text != widget.name ? nameController.text : null;
+      String? updatedEmail =
+          emailController.text != widget.email ? emailController.text : null;
+      String? updatedTel =
+          telController.text.isNotEmpty ? telController.text : null;
+      String? updatedPassword = passwordController.text != widget.password
+          ? passwordController.text
+          : null;
+
+      await ApiProvider().uploadProfile(
+        name: updatedName,
+        telNumber: updatedTel,
+        emailAddress: updatedEmail,
+        password: updatedPassword,
+        profilePic: _image,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully!')),
+      );
+
+      // Save updated data locally
+      // await saveUserData(
+      //   nameController.text,
+      //   emailController.text,
+      //   passwordController.text,
+      // );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update profile.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +200,7 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 const SizedBox(height: 10),
                                 GestureDetector(
+                                  onTap: _pickImage,
                                   child: Container(
                                     width: 80,
                                     height: 80,
@@ -132,139 +217,42 @@ class _ProfileState extends State<Profile> {
                                           size: 35,
                                         )),
                                   ),
-                                  onTap: () {},
                                 ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: 160,
                                   height: 25,
-                                  child: TextFormField(
-                                    style: const TextStyle(fontSize: 14),
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 1),
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.deepPurple,
-                                          )),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.red,
-                                          )),
-                                    ),
-                                  ),
+                                  child: _buildTextField(
+                                    'Name', 
+                                    nameController
+                                  )
                                 ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: 160,
                                   height: 25,
-                                  child: TextFormField(
-                                    style: const TextStyle(fontSize: 14),
-                                    keyboardType: TextInputType.name,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 1),
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.deepPurple,
-                                          )),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.red,
-                                          )),
-                                    ),
-                                  ),
+                                  child: _buildTextField(
+                                    'Name', 
+                                    telController
+                                  )
                                 ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: 160,
                                   height: 25,
-                                  child: TextFormField(
-                                    style: const TextStyle(fontSize: 14),
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 1),
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.deepPurple,
-                                          )),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.red,
-                                          )),
-                                    ),
-                                  ),
+                                  child: _buildTextField(
+                                    'Name', 
+                                    emailController
+                                  )
                                 ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: 160,
                                   height: 25,
-                                  child: TextFormField(
-                                    style: const TextStyle(fontSize: 14),
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 1),
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.deepPurple,
-                                          )),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          borderSide: const BorderSide(
-                                            color: Colors.red,
-                                          )),
-                                    ),
-                                  ),
+                                  child: _buildTextField(
+                                    'Name', 
+                                    passwordController
+                                  )
                                 ),
                               ],
                             )
@@ -281,8 +269,18 @@ class _ProfileState extends State<Profile> {
                               // leading: const Icon(Icons.payment, color: Colors.white,),
                               iconColor: Colors.white,
                               collapsedIconColor: Colors.white,
-                              title: const Text("Bank Accounts", style: TextStyle(color: Colors.white,),),
-                              subtitle: const Text("2 Accounts", style: TextStyle(color: Colors.white,),),
+                              title: const Text(
+                                "Bank Accounts",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              subtitle: const Text(
+                                "2 Accounts",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                               children: [
                                 Card(
                                   color: Colors.white,
@@ -393,5 +391,57 @@ class _ProfileState extends State<Profile> {
                 onPressed: () {},
               ),
             ]))));
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller,
+      {bool isPassword = false}) {
+    return TextFormField(
+        controller: controller,
+        obscureText: isPassword,
+        style: const TextStyle(fontSize: 14),
+        // keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+          fillColor: Colors.white,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.deepPurple,
+              )),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.red,
+              )),
+        ),      
+    );
+  }
+}
+
+class ProfileDetails {
+  final String name;
+  final String telNumber;
+  final String emailAddress;
+  final String profilePic;
+
+  ProfileDetails({
+    required this.name,
+    required this.telNumber,
+    required this.emailAddress,
+    required this.profilePic,
+  });
+
+  factory ProfileDetails.fromJson(Map<String, dynamic> json) {
+    return ProfileDetails(
+      name: json['name'] ?? '',
+      telNumber: json['telNumber'] ?? '',
+      emailAddress: json['emailAddress'] ?? '',
+      profilePic: json['profilePic'] ?? '',
+    );
   }
 }
