@@ -39,6 +39,31 @@ class ApiProvider {
     }
   }
 
+  Future<http.Response> getRequest(
+      {required String route, required Map<String, dynamic> data}) async {
+    final url = Uri.parse('$baseUrl$route');
+    final token = await _getToken();
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      return response;
+    } catch (e) {
+      print('Error making GET request: $e');
+      rethrow;
+    }
+  }
+
+  
+
   Future<http.Response> sendResetLink({required String email}) async {
     final url = Uri.parse('$baseUrl/forgot-password');
 

@@ -4,6 +4,7 @@ import 'package:banking_app/components/button.dart';
 import 'package:banking_app/providers/apiProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -30,20 +31,22 @@ class _ProfileState extends State<Profile> {
   SharedPreferences? preferences;
   String? photoUrl;
   File? _image;
-  List<ProfileDetails> profile = [];
+  // List<ProfileDetails> profile = [];
+  // late final Map<dynamic, dynamic> profile;
+  // Map<String, dynamic> profile = {};
 
   @override
   void initState() {
     super.initState();
-    // _fetchProfile();
+    fetchProfileData();
   }
 
-  Future<void> saveUserData(String name, String email, String password) async {
-    final preferences = await SharedPreferences.getInstance();
-    preferences.setString('name', name);
-    preferences.setString('email', email);
-    preferences.setString('password', password);
-  }
+  // Future<void> saveUserData(String name, String email, String password) async {
+  //   final preferences = await SharedPreferences.getInstance();
+  //   preferences.setString('name', name);
+  //   preferences.setString('email', email);
+  //   preferences.setString('password', password);
+  // }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -56,43 +59,173 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  Future<void> _submitForm() async {
-    try {
-      // Only send fields that have been updated
-      String? updatedName =
-          nameController.text != widget.name ? nameController.text : null;
-      String? updatedEmail =
-          emailController.text != widget.email ? emailController.text : null;
-      String? updatedTel =
-          telController.text.isNotEmpty ? telController.text : null;
-      String? updatedPassword = passwordController.text != widget.password
-          ? passwordController.text
-          : null;
+  Future<String?> _getSharedPreferenceData(String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(key);
+}
 
-      await ApiProvider().uploadProfile(
-        name: updatedName,
-        telNumber: updatedTel,
-        emailAddress: updatedEmail,
-        password: updatedPassword,
-        profilePic: _image,
-      );
 
+  Future<void> fetchProfileData() async {
+  try {
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:8000/api/profile/fetch'),
+      headers: {
+        // 'Authorization': 'Bearer $token', // Remove if token isn't required
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      final profileData = responseData['data'][0]; // Adjust index as needed
+
+      // Update controllers with profile data or SharedPreferences fallback
+      setState(() {
+        photoUrl = profileData['profilePic'] != null
+            ? 'http://10.0.2.2:8000/api/storage/${profileData['profilePic']}'
+            : null;
+
+        nameController.text = profileData['name'] ?? _getSharedPreferenceData('name') ?? '';
+        telController.text = profileData['telNumber'] ?? _getSharedPreferenceData('telNumber') ?? '';
+        emailController.text = profileData['emailAddress'] ?? _getSharedPreferenceData('emailAddress') ?? '';
+        passwordController.text = profileData['password'] ?? _getSharedPreferenceData('password') ?? '';
+      });
+    } else {
+      print('Failed to fetch profile data: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error fetching profile data: $e');
+  }
+}
+
+
+  // Future<void> _fetchProfile() async {
+  //   final data = {
+  //     'name': nameController.text,
+  //     'telNumber': telController.text,
+  //     // 'password': _passController.text,
+  //   };
+
+  //   try {
+  //     final result =
+  //         await ApiProvider().getRequest(route: '/profile/fetch', data: data);
+      
+  //     if (result.statusCode == 200) {
+        
+  //       // Map<String, dynamic> profile = response;
+  //       // print('successful: ${profile['data']}');
+  //       final response = jsonDecode(result.body)['data'];
+  //       print('response: $response');
+  //       // return response;
+  //       setState(() {
+  //         nameController.text = widget.name;
+  //           // telController.text = profile['telNumber'] ?? 'H';
+  //           emailController.text = widget.email;
+  //           passwordController.text = widget.password; // Do not fetch passwords
+  //           // photoUrl = profileData['profilePic'] ?? preferences?.getString('photo');
+  //         // final orderId = jsonResponse['id'];
+  //       });
+  //     }
+  //     // final response = await ApiProvider().fetchProfile();
+  //     // print(response.body);
+
+  //     // final Map<String, dynamic> jsonResponse = json.decode(response.body);
+  //     // if (jsonResponse['success'] == true) {
+  //     //   setState(() {
+  //     //     // profile = jsonResponse['data'] as Map;
+  //     //     profile = jsonResponse;
+  //     //     print(profile);
+  //     //     print('${profile['data']['telNumber']}');
+  //     //     // final userProfile = profile;
+  //     //     setState(() {
+  //     //       nameController.text = widget.name;
+  //     //       // telController.text = profile['telNumber'] ?? 'H';
+  //     //       emailController.text = widget.email;
+  //     //       passwordController.text = widget.password; // Do not fetch passwords
+  //     //       // photoUrl = profileData['profilePic'] ?? preferences?.getString('photo');
+  //     //     });
+  //     //   });
+  //     // } else {
+  //     //   print("Invalid response format");
+  //     // }
+
+  //     // setState(() {
+  //     //   nameController.text = profileData['name'] ?? widget.name;
+  //     //   telController.text = profileData['telNumber'] ??
+  //     //       preferences?.getString('telNumber') ??
+  //     //       '';
+  //     //   emailController.text = profileData['emailAddress'] ?? widget.email;
+  //     //   passwordController.text = widget.password; // Do not fetch passwords
+  //     //   photoUrl = profileData['profilePic'] ?? preferences?.getString('photo');
+  //     // });
+  //   } catch (e) {
+  //     print("Error fetching profile: $e");
+
+  //     // Fallback to shared preferences
+  //     // setState(() {
+  //     //   nameController.text = preferences?.getString('name') ?? widget.name;
+  //     //   telController.text = preferences?.getString('telNumber') ?? '';
+  //     //   emailController.text = preferences?.getString('email') ?? widget.email;
+  //     //   passwordController.text = widget.password;
+  //     //   photoUrl = preferences?.getString('photo');
+  //     // });
+  //   }
+  // }
+
+  Future<String> _getToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString('token') ?? '';
+  }
+
+  Future<void> uploadProfile() async {
+  final url = Uri.parse('http://10.0.2.2:8000/api/profile/store');
+  final token = await _getToken(); // Ensure you retrieve the correct token
+
+  // Create a multipart request
+  final request = http.MultipartRequest('POST', url);
+
+  // Add headers
+  request.headers['Authorization'] = 'Bearer $token';
+
+  // Add form fields
+  request.fields['name'] = nameController.text;
+  request.fields['telNumber'] = telController.text;
+  request.fields['emailAddress'] = emailController.text;
+  request.fields['password'] = passwordController.text;
+
+  // Add profile picture (if available)
+  if (_image != null) {
+    request.files.add(await http.MultipartFile.fromPath(
+      'profilePic',
+      _image!.path, // Replace `_image` with your selected file
+    ));
+  }
+
+  try {
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile updated successfully!')),
       );
-
-      // Save updated data locally
-      // await saveUserData(
-      //   nameController.text,
-      //   emailController.text,
-      //   passwordController.text,
-      // );
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to update profile.')),
+        SnackBar(content: Text('Failed to update profile: ${response.body}')),
       );
     }
+  } catch (e) {
+    print('Error during upload: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('An error occurred while updating profile.')),
+    );
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -200,60 +333,60 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 const SizedBox(height: 10),
                                 GestureDetector(
-                                  onTap: _pickImage,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: ShapeDecoration(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(90),
-                                      ),
-                                    ),
-                                    child: const Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 35,
-                                        )),
-                                  ),
-                                ),
+  onTap: _pickImage,
+  child: Container(
+    width: 80,
+    height: 80,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.circle,
+      image: photoUrl != null
+          ? DecorationImage(
+              image: NetworkImage(photoUrl!),
+              fit: BoxFit.cover,
+            )
+          : null,
+    ),
+    child: photoUrl == null
+        ? const Icon(
+            Icons.person,
+            size: 35,
+          )
+        : null, // Display icon only when there's no profile picture
+  ),
+),
+
                                 const SizedBox(height: 10),
                                 SizedBox(
-                                  width: 160,
-                                  height: 25,
-                                  child: _buildTextField(
-                                    'Name', 
-                                    nameController
-                                  )
-                                ),
+                                    width: 160,
+                                    height: 25,
+                                    child: _buildTextField(
+                                        keyboardType: TextInputType.name,
+                                        nameController)),
                                 const SizedBox(height: 10),
                                 SizedBox(
-                                  width: 160,
-                                  height: 25,
-                                  child: _buildTextField(
-                                    'Name', 
-                                    telController
-                                  )
-                                ),
+                                    width: 160,
+                                    height: 25,
+                                    child: _buildTextField(
+                                        keyboardType: TextInputType.number,
+                                        telController)),
                                 const SizedBox(height: 10),
                                 SizedBox(
-                                  width: 160,
-                                  height: 25,
-                                  child: _buildTextField(
-                                    'Name', 
-                                    emailController
-                                  )
-                                ),
+                                    width: 160,
+                                    height: 25,
+                                    child: _buildTextField(
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        emailController)),
                                 const SizedBox(height: 10),
                                 SizedBox(
-                                  width: 160,
-                                  height: 25,
-                                  child: _buildTextField(
-                                    'Name', 
-                                    passwordController
-                                  )
-                                ),
+                                    width: 160,
+                                    height: 25,
+                                    child: _buildTextField(
+                                        keyboardType:
+                                            TextInputType.visiblePassword,
+                                        passwordController,
+                                        isPassword: true)),
                               ],
                             )
                           ],
@@ -388,37 +521,36 @@ class _ProfileState extends State<Profile> {
                 title: 'Save Details',
                 width: double.infinity,
                 disable: false,
-                onPressed: () {},
+                onPressed: uploadProfile,
               ),
             ]))));
   }
 
-  Widget _buildTextField(String label, TextEditingController controller,
-      {bool isPassword = false}) {
+  Widget _buildTextField(TextEditingController controller,
+      {bool isPassword = false, required TextInputType keyboardType}) {
     return TextFormField(
-        controller: controller,
-        obscureText: isPassword,
-        style: const TextStyle(fontSize: 14),
-        // keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-          fillColor: Colors.white,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(10)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Colors.deepPurple,
-              )),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Colors.red,
-              )),
-        ),      
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: isPassword,
+      style: const TextStyle(fontSize: 14),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+        fillColor: Colors.white,
+        filled: true,
+        enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(10)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Colors.deepPurple,
+            )),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: Colors.red,
+            )),
+      ),
     );
   }
 }
