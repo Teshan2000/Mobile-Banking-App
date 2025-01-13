@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BankCardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,6 @@ Route::post('/reset-password', [AuthController::class, 'ResetPassword']);
 
 Route::post('/profile/store', [ProfileController::class, 'store']);
 Route::get('/profile/fetch', [ProfileController::class, 'fetch']);
+
+Route::post('/store-cards', [BankCardController::class, 'storeCard']);
+Route::get('/fetch-cards', [BankCardController::class, 'fetchCard']);
